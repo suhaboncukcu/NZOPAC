@@ -1,5 +1,7 @@
 # NZOPAC // GRID 64
 
+### ▶ Play it live: **https://suhaboncukcu.github.io/NZOPAC/**
+
 A web-deployable Three.js arcade game whose entire art direction is **derived from a
 random 64-character alphanumeric string**.
 

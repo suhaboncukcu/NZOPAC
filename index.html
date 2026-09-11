@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>NZOPAC // GRID 64</title>
+<meta name="description" content="A neon grid-runner on an 8x8 circuit, seeded by a 64-character string." />
+<meta name="theme-color" content="#070b10" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Crect width='8' height='8' fill='%23070b10'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='3' y='1' width='1' height='1' fill='%23ffab4a'/%3E%3Crect x='4' y='1' width='1' height='1' fill='%23ffab4a'/%3E%3Crect x='1' y='2' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23ffab4a'/%3E%3Crect x='4' y='2' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='7' y='3' width='1' height='1' fill='%23ffab4a'/%3E%3Crect x='0' y='4' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='1' y='4' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='3' y='6' width='1' height='1' fill='%23ffab4a'/%3E%3Crect x='0' y='7' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='1' y='7' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='2' y='7' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='3' y='7' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='4' y='7' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='5' y='7' width='1' height='1' fill='%234fc3ff'/%3E%3Crect x='6' y='7' width='1' height='1' fill='%234fc3ff'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="app">
+    <canvas id="scene"></canvas>
+
+    <div class="fx scanlines" aria-hidden="true"></div>
+    <div class="fx vignette" aria-hidden="true"></div>
+
+    <div class="hud">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" id="logoGrid" aria-hidden="true"></div>
+          <div class="brand-text">
+            <div class="wordmark">NZOPAC</div>
+            <div class="sub">GRID<span class="slash">/</span>64 <span class="dot">·</span> build&nbsp;648499</div>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><span class="k">SCORE</span><span class="v" id="score">0</span></div>
+          <div class="stat"><span class="k">BEST</span><span class="v" id="best">0</span></div>
+        </div>
+      </header>
+
+      <footer class="bottombar">
+        <div class="readouts">
+          <div class="readout"><span class="k">LEVEL</span><span class="v" id="level">01</span></div>
+          <div class="readout"><span class="k">LIVES</span><span class="v lives" id="lives"></span></div>
+          <div class="readout"><span class="k">CORES</span><span class="v" id="cores">7<i>/7</i></span></div>
+          <div class="readout"><span class="k">COMBO</span><span class="v" id="combo">x1</span></div>
+          <div class="readout seed"><span class="k">SEED</span><span class="v mono" id="seedText">—</span></div>
+        </div>
+        <div class="actions">
+          <button id="muteBtn" class="btn" type="button">SOUND&nbsp;ON</button>
+          <button id="seedBtn" class="btn" type="button">NEW&nbsp;SEED</button>
+          <button id="pauseBtn" class="btn" type="button">PAUSE</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- START -->
+    <div class="overlay" id="startOverlay">
+      <div class="panel">
+        <div class="logo-lg" id="logoGridLg" aria-hidden="true"></div>
+        <h1>NZOPAC</h1>
+        <p class="tag">GRID<span class="slash">/</span>64 &nbsp;·&nbsp; DATA&nbsp;RUNNER</p>
+        <p class="lede">Collect the seven numbered cores.<br />Outrun the glitch swarm. Don't let it touch you.</p>
+        <div class="keys">
+          <div class="key"><b>W A S D</b><span>/</span><b>↑ ← ↓ →</b><span>move</span></div>
+          <div class="key"><b>P</b><span>pause</span><b>M</b><span>mute</span></div>
+          <div class="key"><b>SWIPE</b><span>on touch devices</span></div>
+        </div>
+        <div class="cta">PRESS <b>SPACE</b> &nbsp;/&nbsp; TAP TO RUN</div>
+        <div class="start-actions">
+          <button id="seedBtn2" class="btn" type="button">NEW&nbsp;SEED</button>
+          <button id="muteBtn2" class="btn" type="button">SOUND&nbsp;ON</button>
+        </div>
+        <div class="seedbox"><span>SEED</span><code id="seedText2">—</code></div>
+      </div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div class="overlay hidden" id="overOverlay">
+      <div class="panel">
+        <div class="over-mark">CONNECTION&nbsp;SEVERED</div>
+        <h1 class="sm">RUN&nbsp;TERMINATED</h1>
+        <div class="final">
+          <div class="stat big"><span class="k">SCORE</span><span class="v" id="finalScore">0</span></div>
+          <div class="stat big"><span class="k">LEVEL</span><span class="v" id="finalLevel">01</span></div>
+          <div class="stat big"><span class="k">BEST</span><span class="v" id="finalBest">0</span></div>
+        </div>
+        <div class="cta">PRESS <b>SPACE</b> &nbsp;/&nbsp; TAP TO RE-RUN</div>
+        <div class="start-actions">
+          <button id="seedBtn3" class="btn" type="button">NEW&nbsp;SEED</button>
+        </div>
+        <div class="seedbox"><span>SEED</span><code id="seedText3">—</code></div>
+      </div>
+    </div>
+
+    <div class="banner" id="banner" aria-live="polite"></div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+  </div>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>
